@@ -1,29 +1,15 @@
-import { webln } from "@getalby/sdk";
 import React from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { localStorageKeys } from "../constants";
-import useStore from "../state/store";
 
 export function Wallet() {
   const navigate = useNavigate();
 
   React.useEffect(() => {
     (async () => {
-      const nwcUrl = window.localStorage.getItem(localStorageKeys.nwcUrl);
-      if (nwcUrl) {
-        console.log("Enabling provider");
-        try {
-          const _provider = new webln.NostrWebLNProvider({
-            nostrWalletConnectUrl: nwcUrl,
-          });
-          await _provider.enable();
-          useStore.getState().setProvider(_provider);
-          console.log("Provider enabled");
-        } catch (error) {
-          console.error(error);
-          alert("Failed to load wallet: " + error);
-          navigate("/");
-        }
+      const lightningAddress = window.localStorage.getItem(localStorageKeys.lightningAddress);
+      if (lightningAddress) {
+        console.log("Lightning address set");
       } else {
         navigate("/");
       }

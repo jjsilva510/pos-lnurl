@@ -1,24 +1,34 @@
 import { Invoice } from "@getalby/lightning-tools";
 import QRCode from "qrcode.react";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Backbar } from "../../components/Backbar";
-import useStore from "../../state/store";
+import React from "react";
 
 export function Pay() {
-  const { invoice } = useParams();
+  //const { invoice } = useParams();
   const navigate = useNavigate();
-  const { provider } = useStore();
+  const location = useLocation();
+  const { paymentRequest, verify } = location.state as { paymentRequest: string; verify: string };
   const [amount, setAmount] = useState(0);
   const [description, setDescription] = useState("");
   const [hasCopied, setCopied] = useState(false);
 
+  const invoice = React.useMemo(
+    () =>
+      new Invoice({
+        pr: paymentRequest,
+        verify,
+      }),
+    [paymentRequest, verify]
+  );
+
   function copyQr() {
     try {
-      if (!invoice) {
+      if (!paymentRequest) {
         return;
       }
-      window.navigator.clipboard.writeText(invoice);
+      window.navigator.clipboard.writeText(paymentRequest);
       setCopied(true);
       setTimeout(() => setCopied(false), 1000);
     } catch (error) {
@@ -27,12 +37,8 @@ export function Pay() {
   }
 
   useEffect(() => {
-    if (!provider) {
-      return;
-    }
     if (invoice) {
-      const inv = new Invoice({ pr: invoice });
-      const { satoshi, description } = inv;
+      const { satoshi, description } = invoice;
       setAmount(satoshi);
       if (description) {
         setDescription(description);
@@ -40,18 +46,20 @@ export function Pay() {
 
       const interval = setInterval(async () => {
         console.log("Checking invoice", invoice);
-        const response = await provider.lookupInvoice({
-          paymentRequest: invoice,
-        });
-        if (response.paid) {
-          navigate("../paid");
+        try {
+          const paid = await invoice.verifyPayment();
+          if (paid) {
+            navigate("../paid");
+          }
+        } catch (error) {
+          console.error("failed to verify payment", error);
         }
       }, 3000);
       return () => {
         clearInterval(interval);
       };
     }
-  }, [invoice, navigate, provider]);
+  }, [invoice, navigate]);
 
   if (!invoice) {
     return null;
@@ -64,7 +72,7 @@ export function Pay() {
         <span className="text-4xl font-bold">{new Intl.NumberFormat().format(amount)} sats</span>
         <span className="font-semibold">{description}</span>
         <div className="relative flex items-center justify-center p-4 bg-white" onClick={copyQr}>
-          <QRCode value={invoice} size={256} />
+          <QRCode value={invoice.paymentRequest} size={256} />
         </div>
         <p className="mb-4 flex flex-row items-center justify-center gap-2">
           {!hasCopied && <span className="loading loading-spinner text-primary"></span>}

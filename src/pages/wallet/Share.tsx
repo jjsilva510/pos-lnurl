@@ -9,14 +9,14 @@ export function Share() {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    const nwcUrl = window.localStorage.getItem(localStorageKeys.nwcUrl);
-    if (nwcUrl) {
-      console.log("Restoring wallet URL", nwcUrl);
-      const nwcEncoded = btoa(nwcUrl);
+    const lightningAddress = window.localStorage.getItem(localStorageKeys.lightningAddress);
+    if (lightningAddress) {
+      console.log("Restoring wallet URL", lightningAddress);
+      const lightningAddressEncoded = btoa(lightningAddress);
       setShareURI(
         window.location.href.replace(
           "/wallet/share",
-          `?nwc=${nwcEncoded}&name=${localStorage.getItem(localStorageKeys.label) || ""}&currency=${localStorage.getItem(localStorageKeys.currency) || ""}`
+          `?lightningAddress=${lightningAddressEncoded}&name=${localStorage.getItem(localStorageKeys.label) || ""}&currency=${localStorage.getItem(localStorageKeys.currency) || ""}`
         )
       );
     }

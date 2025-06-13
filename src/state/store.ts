@@ -1,20 +1,9 @@
-import { webln } from "@getalby/sdk";
 import { create } from "zustand";
 
-interface State {
-  readonly provider: webln.NostrWebLNProvider | undefined;
-}
+interface State {}
 
-interface Actions {
-  setProvider(provider: webln.NostrWebLNProvider | undefined): void;
-}
+interface Actions {}
 
-const useStore = create<State & Actions>((set) => ({
-  provider: undefined,
-  setProvider: (provider) =>
-    set({
-      provider,
-    }),
-}));
+const useStore = create<State & Actions>(() => ({}));
 
 export default useStore;

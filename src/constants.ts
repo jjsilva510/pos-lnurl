@@ -1,5 +1,5 @@
 export const localStorageKeys = {
-  nwcUrl: "pos:nwcUrl",
+  lightningAddress: "pos:lightningAddress",
   currency: "pos:currency",
   label: "pos:label",
 };

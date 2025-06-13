@@ -1,8 +1,7 @@
 import React, { FormEvent, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom"; // Import useLocation
 import { Navbar } from "../../components/Navbar";
-import useStore from "../../state/store";
-import { fiat } from "@getalby/lightning-tools";
+import { fiat, LightningAddress } from "@getalby/lightning-tools";
 import { localStorageKeys } from "../../constants";
 import { PopiconsChevronBottomDuotone, PopiconsEditPencilDuotone } from "@popicons/react";
 
@@ -15,11 +14,11 @@ export function New() {
   const [isLoading, setLoading] = React.useState(false);
   const [currency, setCurrency] = React.useState("SATS"); // State for currency selection
   const navigate = useNavigate();
-  const provider = useStore((store) => store.provider);
   const location = useLocation(); // Get the current location
   const [label, setLabel] = React.useState(
     localStorage.getItem(localStorageKeys.label) || DEFAULT_LABEL
   );
+  const lightningAddress = window.localStorage.getItem(localStorageKeys.lightningAddress);
   const [currencies, setCurrencies] = React.useState<string[]>(["SATS"]);
   useEffect(() => {
     async function fetchCurrencies() {
@@ -83,15 +82,28 @@ export function New() {
       return;
     }
     try {
-      if (!provider) {
-        throw new Error("wallet not loaded");
+      if (!lightningAddress) {
+        throw new Error("lightning address not set");
       }
       setLoading(true);
-      const invoice = await provider.makeInvoice({
-        amount: totalInSats.toString(), // Use total for the invoice
-        defaultMemo: label,
+      const ln = new LightningAddress(lightningAddress);
+      await ln.fetch();
+
+      const invoice = await ln.requestInvoice({
+        satoshi: totalInSats,
+        comment: label,
       });
-      navigate(`../pay/${invoice.paymentRequest}`);
+
+      if (!invoice.verify) {
+        throw new Error("this lightning address does not support LNURL-verify");
+      }
+
+      navigate(`../pay`, {
+        state: {
+          paymentRequest: invoice.paymentRequest,
+          verify: invoice.verify,
+        },
+      });
     } catch (error) {
       console.error(error);
       alert("Failed to create invoice: " + error);

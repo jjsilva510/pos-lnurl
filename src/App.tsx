@@ -18,7 +18,7 @@ function App() {
           <Route path="/" Component={Home} />
           <Route path="/wallet" Component={Wallet}>
             <Route path="new" Component={New} />
-            <Route path="pay/:invoice" Component={Pay} />
+            <Route path="pay" Component={Pay} />
             <Route path="paid" Component={Paid} />
             <Route path="share" Component={Share} />
             <Route path=":legacyWallet/new" Component={LegacyWalletRedirect} />
@@ -43,7 +43,7 @@ function LegacyWalletRedirect() {
       return;
     }
 
-    window.localStorage.setItem(localStorageKeys.nwcUrl, legacyWallet);
+    window.localStorage.setItem(localStorageKeys.lightningAddress, legacyWallet);
     navigate("/wallet/new");
   }, [navigate, legacyWallet]);
 

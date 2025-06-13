@@ -38,7 +38,7 @@ export function Navbar() {
                     e.preventDefault();
                     return;
                   }
-                  window.localStorage.removeItem(localStorageKeys.nwcUrl);
+                  window.localStorage.removeItem(localStorageKeys.lightningAddress);
                 }}
                 className="text-error"
               >
