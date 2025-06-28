@@ -1,6 +1,6 @@
 # BuzzPay LNURL
 
-[![Sponsor](https://lnfly.albylabs.com/api/apps/386/proxy/api/badge/72f823dc-c7f0-4be0-a196-276a16b7333e)](https://lnfly.albylabs.com/api/apps/386/view?project=72f823dc-c7f0-4be0-a196-276a16b7333e)
+[![Sponsor](https://lnfly.albylabs.com/api/apps/386/proxy/api/badge/72f823dc-c7f0-4be0-a196-276a16b7333e)](https://sponsor.lnfly.albylabs.com/?project=72f823dc-c7f0-4be0-a196-276a16b7333e)
 
 Fork of Alby's super simple self-custodial PoS powered by LNURL instead of NWC.
 
