@@ -25,7 +25,7 @@ const pwaConfig: Partial<VitePWAOptions> = {
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), VitePWA(pwaConfig)],
-  base: "/pos-lnurl/",
+  base: '', // <--- CHANGE THIS LINE TO AN EMPTY STRING
   server: {
     host: "0.0.0.0",
   },

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Alby POS LNURL</string>
+    <string name="title_activity_main">Alby POS LNURL</string>
+    <string name="package_name">com.jjsilva.poslnurl</string>
+    <string name="custom_url_scheme">com.jjsilva.poslnurl</string>
+</resources>

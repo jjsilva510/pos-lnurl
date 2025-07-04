@@ -11,6 +11,9 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@capacitor/android": "^7.4.1",
+    "@capacitor/cli": "^7.4.1",
+    "@capacitor/core": "^7.4.1",
     "@getalby/lightning-tools": "^5.2.0",
     "@popicons/react": "0.0.11",
     "qrcode.react": "^3.1.0",
